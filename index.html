@@ -43,6 +43,8 @@
   .savechip .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
     transition:background .3s,transform .3s}
   .savechip.saving .dot{background:var(--accent);transform:scale(1.3)}
+  .savechip.saveerr{color:var(--red)}
+  .savechip.saveerr .dot{background:var(--red)}
 
   /* Tabs */
   nav{position:fixed;bottom:0;left:0;right:0;z-index:50;
@@ -519,6 +521,26 @@
   </div>
 </div>
 
+<!-- Edit position modal -->
+<div class="modal" id="editPosModal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2>Edit position</h2>
+    <label class="flbl">Ticker</label>
+    <input class="fin txt" type="text" id="epTicker" autocapitalize="characters">
+    <label class="flbl">Company name</label>
+    <input class="fin txt" type="text" id="epName">
+    <label class="flbl">Dividend frequency</label>
+    <select class="fin" id="epDiv">
+      <option>None</option><option>Quarterly</option><option>Semi-Annual</option><option>Annual</option>
+    </select>
+    <div style="margin-top:22px" class="btnrow">
+      <button class="btn btn-ghost" id="epCancel">Cancel</button>
+      <button class="btn btn-primary" id="epSave">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- Confirm dialog -->
 <div class="modal" id="confirmModal">
   <div class="sheet">
@@ -567,7 +589,8 @@ const DEFAULTS=()=>({
     {depA:0,depB:0,real:0,unreal:0}
   ],
   seed:{ begA:0, begB:0, shA:0, shB:0 },
-  parPrice:1,   // share price used to issue shares from the very first deposit
+  parPriceA:5,  // initial Class A share price (first deposit issues shares at this)
+  parPriceB:1,  // initial Class B share price
   minor:{}, // legacy, no longer used
   shareholders:[ {id:"cole",name:"Cole Kramer",cls:"A"} ],
   positions:[],
@@ -591,6 +614,8 @@ async function load(){
   if(!Array.isArray(state.ledger)) state.ledger=[];
   if(!Array.isArray(state.shareholders)) state.shareholders=[{id:"cole",name:"Cole Kramer",cls:"A"}];
   if(!state.ui.chartMode) state.ui.chartMode="monthly";
+  if(state.parPriceA==null) state.parPriceA=(+state.parPrice||5);
+  if(state.parPriceB==null) state.parPriceB=(+state.parPrice||1);
   migrate();
 }
 
@@ -647,13 +672,15 @@ function syncFundFields(){
 }
 function save(){
   const chip=document.getElementById("savechip");
-  chip.classList.add("saving");
+  chip.classList.add("saving"); chip.classList.remove("saveerr");
   document.getElementById("savetxt").textContent="Saving";
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
-    try{ await window.storage.set(KEY,JSON.stringify(state),SHARED); }catch(e){}
+    let ok=false;
+    try{ ok=!!await window.storage.set(KEY,JSON.stringify(state),SHARED); }catch(e){ ok=false; }
     chip.classList.remove("saving");
-    document.getElementById("savetxt").textContent="Saved";
+    if(ok){ document.getElementById("savetxt").textContent="Saved"; }
+    else { chip.classList.add("saveerr"); document.getElementById("savetxt").textContent="Not saved"; }
   },400);
 }
 
@@ -701,13 +728,13 @@ function computeFund(){
     const endA=begA+(+yr.depA||0)+totA;   // B25
     const endB=begB+(+yr.depB||0)+totB;   // B26
 
-    const par=(+state.parPrice||1);
+    const parA=(+state.parPriceA||5), parB=(+state.parPriceB||1);
     const begPriceA=shA!==0?begA/shA:0;   // B33
     let begPriceB=begPriceA;
     if(shB!==0 && begB/shB!==0) begPriceB=begB/shB; // B34
     // When a class has no shares yet, issue the first deposit's shares at par price.
-    const issueA=begPriceA!==0?begPriceA:par;
-    const issueB=begPriceB!==0?begPriceB:par;
+    const issueA=begPriceA!==0?begPriceA:parA;
+    const issueB=begPriceB!==0?begPriceB:parB;
     const newA=issueA!==0?Math.floor((+yr.depA||0)/issueA):0; // B36
     const newB=issueB!==0?Math.floor((+yr.depB||0)/issueB):0; // B37
     const shAe=shA+newA, shBe=shB+newB;
@@ -894,6 +921,11 @@ function positionCard(p){
       <div class="tnum">${fmt$(((+t.shares||0)*(+t.price||0)))}<div class="l2" style="font-size:10px;color:var(--txt3)">total</div></div>`;
     body.appendChild(row);
   });
+  const edit=document.createElement("button");
+  edit.className="btn btn-ghost btn-sm"; edit.style.width="100%"; edit.style.marginTop="10px";
+  edit.textContent="Edit details";
+  edit.onclick=ev=>{ ev.stopPropagation(); openEditPos(p); };
+  body.appendChild(edit);
   c.appendChild(body);
   return c;
 }
@@ -939,6 +971,30 @@ document.getElementById("pastToggle").onclick=function(){
   const open=list.style.display!=="none";
   list.style.display=open?"none":"block";
   this.classList.toggle("open",!open);
+};
+
+/* edit position details (ticker / name / dividend) */
+let editPosRef=null;
+function openEditPos(p){
+  editPosRef=p;
+  document.getElementById("epTicker").value=p.ticker||"";
+  document.getElementById("epName").value=p.name||"";
+  document.getElementById("epDiv").value=p.div||"None";
+  openModal("editPosModal");
+}
+document.getElementById("epCancel").onclick=()=>closeModal("editPosModal");
+document.getElementById("epSave").onclick=()=>{
+  if(!editPosRef) return closeModal("editPosModal");
+  const tk=document.getElementById("epTicker").value.trim().toUpperCase();
+  if(!tk){ document.getElementById("epTicker").focus(); return; }
+  const oldTicker=editPosRef.ticker;
+  editPosRef.ticker=tk;
+  editPosRef.name=document.getElementById("epName").value.trim()||tk;
+  editPosRef.div=document.getElementById("epDiv").value;
+  // keep trade ledger labels in sync with the new ticker
+  state.ledger.forEach(e=>{ if(e.account==="trade" && e.ticker===oldTicker){
+    e.ticker=tk; e.label=e.label.replace(oldTicker,tk); } });
+  save(); closeModal("editPosModal"); renderInvest(); renderHistory();
 };
 
 /* ---------- settings ---------- */
@@ -1061,7 +1117,7 @@ document.getElementById("fmHolder").addEventListener("change",toggleNewName);
 document.getElementById("fmSec").addEventListener("change",toggleNewSec);
 
 const EQUITY_OPTS=[["depA","Class A deposit / withdrawal"],["depB","Class B deposit / withdrawal"]];
-const POSITION_OPTS=[["buy","Buy security"],["sell","Sell security"],["unreal","Unrealized income"]];
+const POSITION_OPTS=[["buy","Buy security"],["sell","Sell security"],["unreal","Unrealized gain/loss (at period end)"]];
 function openFundModal(mode){
   fundDir=1;
   document.querySelectorAll("#fmDir button").forEach(b=>b.classList.toggle("on",b.dataset.v==="1"));
