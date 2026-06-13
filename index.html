@@ -1,1 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#faf8f3">
+<title>Remarkable Assets</title>
+<style>
+  :root{
+    --bg:#faf8f3; --surface:#ffffff; --surface2:#f6f1e7; --line:#ece4d4;
+    --line2:#ddd0b6; --txt:#211d15; --txt2:#6b6354; --txt3:#9b9382;
+    --accent:#bd9333; --accent2:#a87f24; --gold-soft:#f3e9cf;
+    --green:#1f9d57; --red:#cf3b30;
+    --blue:#4f93e6; --radius:14px; --radius-sm:10px;
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+    font-family:var(--sans);font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+  body{padding-bottom:96px}
+  h1,h2,h3{font-weight:600;margin:0}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,select{font-family:inherit;font-size:16px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
 
+  /* Header */
+  header{position:sticky;top:0;z-index:40;background:rgba(250,248,243,.88);
+    backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 0 12px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .mark{width:34px;height:34px;border-radius:9px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-family:var(--serif);font-weight:700;font-size:18px;
+    box-shadow:0 2px 6px rgba(168,127,36,.28)}
+  .brand h1{font-family:var(--serif);font-size:19px;letter-spacing:.2px}
+  .brand .sub{font-size:11.5px;color:var(--txt3);letter-spacing:1.4px;text-transform:uppercase;margin-top:1px}
+  .savechip{margin-left:auto;font-size:11px;color:var(--txt3);display:flex;
+    align-items:center;gap:6px;transition:color .3s}
+  .savechip .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+    transition:background .3s,transform .3s}
+  .savechip.saving .dot{background:var(--accent);transform:scale(1.3)}
+
+  /* Tabs */
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:50;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+    border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+  .tabs{max-width:760px;margin:0 auto;display:flex;padding:0 8px}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding:6px 2px;color:var(--txt3);font-size:10.5px;font-weight:500;
+    letter-spacing:.2px;border-radius:10px;transition:color .15s,background .15s}
+  .tab svg{width:23px;height:23px;stroke-width:1.7}
+  .tab.active{color:var(--accent2)}
+  .tab:active{background:var(--surface2)}
+
+  section{display:none;animation:fade .25s ease}
+  section.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .pagetitle{font-family:var(--serif);font-size:25px;margin:22px 0 3px}
+  .pagesub{color:var(--txt2);font-size:13.5px;margin-bottom:18px}
+
+  /* Cards */
+  .card{background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:18px;margin-bottom:14px;
+    box-shadow:0 1px 2px rgba(60,50,20,.04)}
+  .card h3{font-size:13px;text-transform:uppercase;letter-spacing:1px;
+    color:var(--txt2);font-weight:600;margin-bottom:14px;display:flex;
+    align-items:center;gap:8px}
+  .card h3 .ic{color:var(--accent)}
+
+  /* Metric grid */
+  .metrics{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
+  .metric{background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:15px 16px;box-shadow:0 1px 2px rgba(60,50,20,.04)}
+  .metric .lbl{font-size:11.5px;color:var(--txt2);letter-spacing:.3px;margin-bottom:7px}
+  .metric .val{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.3px}
+  .metric .val.pos{color:var(--green)} .metric .val.neg{color:var(--red)}
+  .metric.wide{grid-column:1/-1;background:var(--gold-soft);border-color:#e7d8b2}
+  .metric.wide .val{color:var(--accent2)}
+  .metric.wide .lbl{color:var(--accent)}
+  .splitrow{display:flex;gap:14px;margin-top:14px;padding-top:13px;
+    border-top:1px solid #e7d8b2}
+  .splititem{flex:1}
+  .splititem .slbl{font-size:11px;color:var(--accent);letter-spacing:.3px;margin-bottom:5px}
+  .splititem .sval{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--txt)}
+  .splititem .sval.pos{color:var(--green)} .splititem .sval.neg{color:var(--red)}
+  .splititem .sval.zero{color:var(--txt3)}
+
+  /* Field rows */
+  .frow{display:flex;align-items:center;gap:12px;padding:11px 0;
+    border-bottom:1px solid var(--line)}
+  .frow:last-child{border-bottom:none}
+  .frow:has(+ .frow.classgap){border-bottom:none}
+  .frow.classgap{border-top:1px solid var(--line2);margin-top:6px;padding-top:17px}
+  .frow label{flex:1;font-size:14px;color:var(--txt2)}
+  .frow .fin{width:130px}
+  .fin{background:var(--surface2);border:1px solid var(--line2);color:var(--txt);
+    border-radius:9px;padding:9px 11px;width:100%;text-align:right;
+    transition:border-color .15s,background .15s}
+  .fin:focus{outline:none;border-color:var(--accent);background:#fff;
+    box-shadow:0 0 0 3px rgba(189,147,51,.15)}
+  .fin.txt{text-align:left}
+  select.fin{text-align:left;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa1ad' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+  .readout{font-family:var(--serif);font-size:15px;font-weight:600;text-align:right;min-width:90px}
+  .readout.pos{color:var(--green)} .readout.neg{color:var(--red)} .readout.zero{color:var(--txt3)}
+
+  /* Year selector */
+  .yearbar{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;margin-bottom:16px;
+    scrollbar-width:none}
+  .yearbar::-webkit-scrollbar{display:none}
+  .ychip{flex-shrink:0;padding:8px 16px;border-radius:20px;background:var(--surface);
+    border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--txt2);
+    transition:all .15s}
+  .ychip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* Holdings */
+  .holding{background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);margin-bottom:13px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(60,50,20,.04)}
+  .hhead{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer}
+  .htick{width:42px;height:42px;border-radius:11px;background:var(--surface2);
+    border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-weight:700;font-size:14px;color:var(--accent2);flex-shrink:0}
+  .hmeta{flex:1;min-width:0}
+  .hmeta .nm{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hmeta .dt{font-size:12px;color:var(--txt3);margin-top:2px}
+  .hstat{text-align:right;flex-shrink:0}
+  .hstat .v{font-family:var(--serif);font-weight:600;font-size:16px}
+  .hstat .s{font-size:11px;color:var(--txt3);margin-top:2px}
+  .chev{color:var(--txt3);transition:transform .2s;flex-shrink:0}
+  .holding.open .chev{transform:rotate(180deg)}
+  .hbody{display:none;border-top:1px solid var(--line);padding:6px 16px 14px}
+  .holding.open .hbody{display:block}
+
+  /* Trade rows */
+  .trade{display:grid;grid-template-columns:auto 1fr auto;gap:10px;
+    align-items:center;padding:11px 30px 11px 0;border-bottom:1px solid var(--line)}
+  .trade:last-of-type{border-bottom:none}
+  .tbadge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:7px;letter-spacing:.3px}
+  .tbadge.buy{background:rgba(31,157,87,.13);color:var(--green)}
+  .tbadge.sell{background:rgba(207,59,48,.12);color:var(--red)}
+  .tinfo .l1{font-size:13.5px}
+  .tinfo .l2{font-size:11.5px;color:var(--txt3);margin-top:2px}
+  .tnum{text-align:right;font-family:var(--serif);font-size:14px;font-weight:600}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 18px;border-radius:11px;font-size:15px;font-weight:600;
+    transition:transform .1s,background .15s,border-color .15s;width:100%}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:active{background:var(--accent2)}
+  .btn-ghost{background:var(--surface);border:1px solid var(--line2);color:var(--txt)}
+  .btn-ghost:active{background:var(--surface2)}
+  .btn-sm{padding:9px 14px;font-size:13.5px;width:auto}
+  .btnrow{display:flex;gap:10px}
+
+  .empty{text-align:center;padding:30px 16px;color:var(--txt3);font-size:14px}
+  .addtrade{margin-top:8px}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;
+    justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
+  .modal.open{display:flex;animation:fade .2s}
+  .sheet{background:var(--surface);width:100%;max-width:760px;
+    border-radius:20px 20px 0 0;border-top:1px solid var(--line2);
+    padding:8px 18px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto;
+    animation:slideup .28s cubic-bezier(.16,1,.3,1)}
+  @keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
+  .grab{width:38px;height:4px;border-radius:2px;background:var(--line2);margin:6px auto 16px}
+  .sheet h2{font-family:var(--serif);font-size:21px;margin-bottom:18px}
+  .flbl{font-size:12.5px;color:var(--txt2);margin:14px 0 6px;display:block;letter-spacing:.2px}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;padding:11px;border-radius:10px;background:var(--surface2);
+    border:1px solid var(--line2);font-size:14px;font-weight:600;color:var(--txt2)}
+  .seg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* Settings rows */
+  .srow{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+  .srow:last-child{border-bottom:none}
+  .srow .si{width:38px;height:38px;border-radius:10px;background:var(--surface2);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0}
+  .srow .st{flex:1}
+  .srow .st .t{font-size:14.5px;font-weight:500}
+  .srow .st .d{font-size:12px;color:var(--txt3);margin-top:2px}
+
+  .hint{font-size:12px;color:var(--txt3);line-height:1.55;margin-top:10px}
+  .pill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;
+    border-radius:7px;background:var(--surface2);color:var(--txt2);margin-left:6px}
+  .secthead{font-family:var(--serif);font-size:17px;margin:22px 0 10px;color:var(--accent2)}
+
+  /* Chart */
+  .chtoggle{margin-left:auto;display:flex;gap:0;border:1px solid var(--line2);
+    border-radius:9px;overflow:hidden}
+  .chtoggle button{padding:6px 13px;font-size:12px;font-weight:600;color:var(--txt2);
+    background:var(--surface2);text-transform:none;letter-spacing:0}
+  .chtoggle button.on{background:var(--accent);color:#fff}
+  .chart-svg{width:100%;height:auto;display:block}
+  .chart-empty{text-align:center;padding:34px 10px;color:var(--txt3);font-size:13.5px}
+
+  /* Past holdings dropdown */
+  .pasttoggle{width:100%;display:flex;align-items:center;justify-content:space-between;
+    gap:8px;padding:13px 16px;margin-bottom:13px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius);font-size:14px;
+    font-weight:600;color:var(--txt2);box-shadow:0 1px 2px rgba(60,50,20,.04)}
+  .pasttoggle:active{background:var(--surface2)}
+  .pasttoggle .chev{transition:transform .2s;color:var(--txt3)}
+  .pasttoggle.open .chev{transform:rotate(180deg)}
+
+  /* History */
+  .hfilter{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;scrollbar-width:none}
+  .hfilter::-webkit-scrollbar{display:none}
+  .hchip{flex-shrink:0;padding:7px 15px;border-radius:20px;background:var(--surface);
+    border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--txt2);transition:all .15s}
+  .hchip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .hentry{display:flex;align-items:center;gap:12px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius);padding:13px 15px;margin-bottom:10px;
+    box-shadow:0 1px 2px rgba(60,50,20,.04)}
+  .hicon{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;
+    align-items:center;justify-content:center;font-size:17px}
+  .hicon.fund{background:var(--gold-soft);color:var(--accent2)}
+  .hicon.trade{background:#eef4ff;color:#3a6ea5}
+  .hicon.shareholder{background:#f3eefb;color:#7a5bb0}
+  .hentry .hbody2{flex:1;min-width:0}
+  .hentry .hl{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hentry .hd{font-size:12px;color:var(--txt3);margin-top:2px;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .hentry .ha{font-family:var(--serif);font-weight:600;font-size:15px;text-align:right;flex-shrink:0}
+  .hentry .ha.pos{color:var(--green)} .hentry .ha.neg{color:var(--red)} .hentry .ha.zero{color:var(--txt3)}
+  .hentry .hx{color:var(--txt3);padding:7px;border-radius:8px;font-size:16px;line-height:1;flex-shrink:0;cursor:pointer}
+  .hentry .hx:active{background:var(--surface2);color:var(--red)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <div class="mark">R</div>
+    <div>
+      <h1>Remarkable Assets</h1>
+      <div class="sub">Portfolio Manager</div>
+    </div>
+    <div class="savechip" id="savechip"><span class="dot"></span><span id="savetxt">Saved</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ FUND ============ -->
+  <section id="fund" class="active">
+    <h2 class="pagetitle">Fund Performance</h2>
+    <p class="pagesub">Class A / Class B equity waterfall</p>
+
+    <div class="yearbar" id="yearbar"></div>
+
+    <div class="metrics">
+      <div class="metric wide">
+        <div class="lbl">Account Value</div>
+        <div class="val" id="m-ending">$0</div>
+        <div class="splitrow">
+          <div class="splititem">
+            <div class="slbl">Annual Return</div>
+            <div class="sval" id="m-return">0.0%</div>
+          </div>
+          <div class="splititem">
+            <div class="slbl">Total Gain ($)</div>
+            <div class="sval" id="m-gain">$0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Account Value
+        <div class="chtoggle" id="chToggle">
+          <button data-m="monthly" class="on">Monthly</button>
+          <button data-m="annual">Annual</button>
+        </div>
+      </h3>
+      <div id="monthPicker"></div>
+      <div id="chartWrap"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Change Submissions <span class="pill" id="yr-pill"></span></h3>
+      <div class="frow"><label>Class A Deposits / Withdrawals</label>
+        <div class="readout" id="o-depA">$0</div></div>
+      <div class="frow"><label>Class B Deposits / Withdrawals</label>
+        <div class="readout" id="o-depB">$0</div></div>
+      <div class="frow"><label>Realized Income</label>
+        <div class="readout" id="o-real">$0</div></div>
+      <div class="frow"><label>Unrealized Income</label>
+        <div class="readout" id="o-unreal">$0</div></div>
+      <button class="btn btn-primary addtrade" id="addEquityChange" style="margin-top:14px">
+        + Submit equity change</button>
+      <button class="btn btn-ghost addtrade" id="addPositionChange" style="margin-top:10px">
+        + Submit position change</button>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Beginning Position</h3>
+      <div class="frow"><label>Beginning Class A Equity</label>
+        <div class="readout" id="o-begA">$0</div></div>
+      <div class="frow"><label>Class A Share Price</label>
+        <div class="readout" id="o-begPrA">$0</div></div>
+      <div class="frow"><label>Class A Shares</label>
+        <div class="readout" id="o-begShA">0</div></div>
+      <div class="frow classgap"><label>Beginning Class B Equity</label>
+        <div class="readout" id="o-begB">$0</div></div>
+      <div class="frow"><label>Class B Share Price</label>
+        <div class="readout" id="o-begPrB">$0</div></div>
+      <div class="frow"><label>Class B Shares</label>
+        <div class="readout" id="o-begShB">0</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Return Allocation</h3>
+      <div class="frow"><label>Total Return</label>
+        <div class="readout" id="o-rettot">$0</div></div>
+      <div class="frow"><label>Class A Return</label>
+        <div class="readout" id="o-retA">$0</div></div>
+      <div class="frow"><label>Class B Return</label>
+        <div class="readout" id="o-retB">$0</div></div>
+      <div class="frow"><label>Class B Hurdle (6%)</label>
+        <div class="readout" id="o-hurdle">$0</div></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Ending Position</h3>
+      <div class="frow"><label>Ending Class A Equity</label>
+        <div class="readout" id="o-endA">$0</div></div>
+      <div class="frow"><label>Class A Share Price</label>
+        <div class="readout" id="o-prA">$0</div></div>
+      <div class="frow"><label>Class A Shares</label>
+        <div class="readout" id="o-shA">0</div></div>
+      <div class="frow classgap"><label>Ending Class B Equity</label>
+        <div class="readout" id="o-endB">$0</div></div>
+      <div class="frow"><label>Class B Share Price</label>
+        <div class="readout" id="o-prB">$0</div></div>
+      <div class="frow"><label>Class B Shares</label>
+        <div class="readout" id="o-shB">0</div></div>
+    </div>
+  </section>
+
+  <!-- ============ SHAREHOLDERS ============ -->
+  <section id="shares">
+    <h2 class="pagetitle">Shareholders</h2>
+    <p class="pagesub">Cap table — driven by fund submissions</p>
+    <div class="yearbar" id="yearbar2"></div>
+
+    <div class="secthead">Major shareholders <span class="pill">Class A</span></div>
+    <div id="majorList"></div>
+
+    <div class="secthead">Minor shareholders <span class="pill">Class B</span></div>
+    <div id="minorList"></div>
+
+    <div class="card" style="margin-top:16px">
+      <h3><span class="ic">◆</span> Class B pool totals</h3>
+      <div class="frow"><label>Minor shareholders</label><div class="readout" id="sh-count">0</div></div>
+      <div class="frow"><label>Total Class B contributed</label><div class="readout" id="sh-tval">$0</div></div>
+    </div>
+    <p class="hint">Shareholders are added and updated through dated submissions on the Fund tab,
+      so every change keeps a paper trail in History. This tab is a read-only view of the result.</p>
+  </section>
+
+  <!-- ============ INVESTMENTS ============ -->
+  <section id="invest">
+    <h2 class="pagetitle">Investments</h2>
+    <p class="pagesub">Positions — driven by fund submissions</p>
+
+    <div class="metrics">
+      <div class="metric"><div class="lbl">Account Value</div><div class="val" id="iv-acct">$0</div></div>
+      <div class="metric"><div class="lbl">Cost Basis</div><div class="val" id="iv-cost">$0</div></div>
+    </div>
+
+    <div id="posList"></div>
+
+    <div id="pastWrap" style="display:none">
+      <button class="pasttoggle" id="pastToggle">
+        <span>Past holdings <span class="pill" id="pastCount">0</span></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div id="pastList" style="display:none"></div>
+    </div>
+
+    <p class="hint">Buys and sells are entered through dated submissions on the Fund tab, so every
+      trade keeps a paper trail in History. This tab is a read-only view of the result.</p>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section id="settings">
+    <h2 class="pagetitle">Settings</h2>
+    <p class="pagesub">Assumptions &amp; data</p>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Fund assumptions</h3>
+      <div class="frow"><label>Hurdle rate</label>
+        <input class="fin" type="number" inputmode="decimal" step="0.01" id="set-hurdle"></div>
+      <div class="frow"><label>Management split</label>
+        <input class="fin" type="number" inputmode="decimal" step="0.01" id="set-split"></div>
+      <div class="frow"><label>Start year</label>
+        <input class="fin" type="number" inputmode="numeric" id="set-startyr"></div>
+      <p class="hint">Enter both as decimals (0.06 = 6%, 0.25 = 25%).<br><br>
+        <b>Hurdle rate</b> is the minimum return Class B earns before any profit is shared.
+        In a year the fund returns more than the hurdle, Class B first receives its hurdle
+        amount off the top. Only the profit <i>above</i> the hurdle is then split.<br><br>
+        <b>Management split</b> is Class A's cut of that above-hurdle profit. At 0.25, Class A
+        (the manager) takes 25% of the excess and Class B keeps the other 75% on top of its
+        hurdle. If the fund returns less than the hurdle, all of the gain goes to Class B and
+        Class A takes nothing; in a losing year the loss is shared so Class A absorbs a portion
+        rather than charging a fee.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="ic">◆</span> Your data</h3>
+      <div class="srow">
+        <div class="si">⤓</div>
+        <div class="st"><div class="t">Export backup</div>
+          <div class="d">Download a .json file you can keep or move</div></div>
+        <button class="btn btn-ghost btn-sm" id="btnExport">Export</button>
+      </div>
+      <div class="srow">
+        <div class="si">⤒</div>
+        <div class="st"><div class="t">Import backup</div>
+          <div class="d">Restore from a .json file</div></div>
+        <button class="btn btn-ghost btn-sm" id="btnImport">Import</button>
+        <input type="file" id="fileImport" accept=".json" style="display:none">
+      </div>
+      <div class="srow">
+        <div class="si" style="color:var(--red)">↺</div>
+        <div class="st"><div class="t">Reset to defaults</div>
+          <div class="d">Wipe everything and start fresh</div></div>
+        <button class="btn btn-ghost btn-sm" id="btnReset" style="color:var(--red)">Reset</button>
+      </div>
+      <p class="hint" id="storehint">Your data saves automatically on this device. Use Export
+        regularly so you always have a copy you control.</p>
+    </div>
+
+    <p class="hint" style="text-align:center;margin-top:8px">
+      Remarkable Assets · add to your Home Screen for an app-like experience</p>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section id="history">
+    <h2 class="pagetitle">History</h2>
+    <p class="pagesub">Every change, newest first</p>
+
+    <div class="hfilter" id="hfilter">
+      <button class="hchip active" data-f="all">All</button>
+      <button class="hchip" data-f="fund">Fund</button>
+      <button class="hchip" data-f="trade">Trades</button>
+      <button class="hchip" data-f="shareholder">Owners</button>
+    </div>
+
+    <div id="histList"></div>
+  </section>
+
+</div>
+
+<!-- Fund change modal -->
+<div class="modal" id="fundModal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2 id="fmTitle">Submit change</h2>
+    <label class="flbl">Account</label>
+    <select class="fin" id="fmField"></select>
+
+    <div id="fmMoneyWrap">
+      <label class="flbl">Direction</label>
+      <div class="seg" id="fmDir">
+        <button data-v="1" class="on" id="fmDirPos">Deposit (+)</button>
+        <button data-v="-1" id="fmDirNeg">Withdrawal (−)</button>
+      </div>
+      <label class="flbl">Amount</label>
+      <input class="fin txt" type="number" inputmode="decimal" id="fmAmount" placeholder="0.00">
+    </div>
+
+    <div id="fmHolderWrap" style="display:none">
+      <label class="flbl" id="fmHolderLbl">Shareholder</label>
+      <select class="fin" id="fmHolder"></select>
+      <div id="fmNewWrap" style="display:none">
+        <label class="flbl">New shareholder name</label>
+        <input class="fin txt" type="text" id="fmNewName" placeholder="Jane Doe">
+      </div>
+    </div>
+
+    <div id="fmSecWrap" style="display:none">
+      <label class="flbl">Security</label>
+      <select class="fin" id="fmSec"></select>
+      <div id="fmNewSecWrap" style="display:none">
+        <label class="flbl">Ticker</label>
+        <input class="fin txt" type="text" id="fmSecTicker" placeholder="AAPL" autocapitalize="characters">
+        <label class="flbl">Company name</label>
+        <input class="fin txt" type="text" id="fmSecName" placeholder="Apple Inc.">
+        <label class="flbl">Dividend frequency</label>
+        <select class="fin" id="fmSecDiv">
+          <option>None</option><option>Quarterly</option><option>Semi-Annual</option><option>Annual</option>
+        </select>
+      </div>
+      <label class="flbl">Shares</label>
+      <input class="fin txt" type="number" inputmode="decimal" id="fmShares" placeholder="0">
+      <label class="flbl">Price per share</label>
+      <input class="fin txt" type="number" inputmode="decimal" id="fmPrice" placeholder="0.00">
+    </div>
+
+    <label class="flbl">Date</label>
+    <input class="fin txt" type="date" id="fmDate">
+    <label class="flbl">Note (optional)</label>
+    <input class="fin txt" type="text" id="fmNote" placeholder="e.g. Q1 contribution">
+    <div style="margin-top:22px" class="btnrow">
+      <button class="btn btn-ghost" id="fmCancel">Cancel</button>
+      <button class="btn btn-primary" id="fmSave">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm dialog -->
+<div class="modal" id="confirmModal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2 id="cfTitle">Are you sure?</h2>
+    <p id="cfMsg" style="color:var(--txt2);font-size:14.5px;margin:0 0 4px"></p>
+    <div style="margin-top:22px" class="btnrow">
+      <button class="btn btn-ghost" id="cfCancel">Cancel</button>
+      <button class="btn btn-primary" id="cfOk" style="background:var(--red)">Delete</button>
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="tabs">
+    <button class="tab active" data-tab="fund">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
+      Fund</button>
+    <button class="tab" data-tab="shares">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 6a3 3 0 010 6M21 20c0-2.5-1.5-4.6-3.5-5.5"/></svg>
+      Owners</button>
+    <button class="tab" data-tab="invest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 12l3 3 7-7"/></svg>
+      Holdings</button>
+    <button class="tab" data-tab="history">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.6L3 8"/><path d="M3 4v4h4"/><path d="M12 7v5l3 2"/></svg>
+      History</button>
+    <button class="tab" data-tab="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+      Settings</button>
+  </div>
+</nav>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- persistence ---------- */
+const KEY="remarkable_assets_v1";
+const SHARED=false;
+let state=null, saveTimer=null;
+
+const DEFAULTS=()=>({
+  hurdle:0.06, split:0.25, startYear:2026,
+  years:[ // index 0 = first year. begEquity only used for year 0.
+    {depA:0,depB:0,real:0,unreal:0}
+  ],
+  seed:{ begA:0, begB:0, shA:0, shB:0 },
+  parPrice:1,   // share price used to issue shares from the very first deposit
+  minor:{}, // legacy, no longer used
+  shareholders:[ {id:"cole",name:"Cole Kramer",cls:"A"} ],
+  positions:[],
+  ui:{ fundYear:0, shareYear:0, chartMode:"monthly", chartMonth:null },
+  ledger:[]
+});
+
+let SEQ=0;
+function newId(){ return Date.now().toString(36)+(SEQ++).toString(36); }
+
+async function load(){
+  try{
+    const r=await window.storage.get(KEY,SHARED);
+    if(r&&r.value){ state=JSON.parse(r.value); }
+  }catch(e){ /* not found */ }
+  if(!state) state=DEFAULTS();
+  // backfill
+  const d=DEFAULTS();
+  for(const k in d) if(!(k in state)) state[k]=d[k];
+  if(!state.ui) state.ui={fundYear:0,shareYear:0};
+  if(!Array.isArray(state.ledger)) state.ledger=[];
+  if(!Array.isArray(state.shareholders)) state.shareholders=[{id:"cole",name:"Cole Kramer",cls:"A"}];
+  if(!state.ui.chartMode) state.ui.chartMode="monthly";
+  migrate();
+}
+
+const FUND_FIELDS={depA:"Class A deposit / withdrawal",depB:"Class B deposit / withdrawal",
+  real:"Realized income",unreal:"Unrealized income"};
+
+// One-time migration: seed the ledger from pre-existing field/trade data so the
+// history reflects what's already in the model, then mark each source migrated.
+function migrate(){
+  if(state._migrated) return;
+  state.years.forEach((yr,yi)=>{
+    Object.keys(FUND_FIELDS).forEach(f=>{
+      const v=+yr[f]||0;
+      if(v!==0){
+        const e={id:newId(),ts:Date.now(),account:"fund",
+          field:f,year:yi,label:FUND_FIELDS[f],amount:v,note:"opening balance"};
+        if(f==="depA") e.holderId="cole";   // Class A openings attributed to Cole
+        state.ledger.push(e);
+      }
+    });
+  });
+  // migrate legacy minor shareholders into the registry + attributed depB entries
+  if(state.minor){
+    Object.keys(state.minor).forEach(yi=>{
+      (state.minor[yi]||[]).forEach(m=>{
+        const id=newId();
+        state.shareholders.push({id,name:m.name||"Unnamed",cls:"B"});
+        // legacy minors were tracked in shares; record as an attribution-only entry
+        state.ledger.push({id:newId(),ts:Date.now(),account:"fund",field:"depB",
+          year:+yi,holderId:id,shares:+m.shares||0,amount:0,
+          label:FUND_FIELDS.depB,note:"migrated · "+(m.name||"Unnamed")});
+      });
+    });
+    state.minor={};
+  }
+  state.positions.forEach((p,pi)=>{
+    p.trades.forEach((t,ti)=>{
+      t._lid=t._lid||newId();
+      state.ledger.push({id:t._lid,ts:Date.now(),account:"trade",posIndex:pi,
+        ticker:p.ticker,label:(t.action||"Buy")+" "+p.ticker,
+        amount:(+t.shares||0)*(+t.price||0)*((t.action||"").toLowerCase()==="sell"?-1:1),
+        note:fmtNum(t.shares)+" @ "+fmt$2(t.price)});
+    });
+  });
+  state._migrated=true;
+}
+
+// Recompute the fund year fields purely from ledger entries (source of truth).
+function syncFundFields(){
+  state.years.forEach(yr=>{ yr.depA=yr.depB=yr.real=yr.unreal=0; });
+  state.ledger.forEach(e=>{
+    if(e.account==="fund" && state.years[e.year]) state.years[e.year][e.field]+=(+e.amount||0);
+  });
+}
+function save(){
+  const chip=document.getElementById("savechip");
+  chip.classList.add("saving");
+  document.getElementById("savetxt").textContent="Saving";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{ await window.storage.set(KEY,JSON.stringify(state),SHARED); }catch(e){}
+    chip.classList.remove("saving");
+    document.getElementById("savetxt").textContent="Saved";
+  },400);
+}
+
+/* ---------- fund math (ported from workbook) ---------- */
+function computeFund(){
+  syncFundFields();
+  const {hurdle:H,split:S}=state;
+  const out=[]; let begA,begB,shA,shB;
+  for(let y=0;y<state.years.length;y++){
+    const yr=state.years[y];
+    if(y===0){ begA=state.seed.begA; begB=state.seed.begB; shA=state.seed.shA; shB=state.seed.shB; }
+    else { begA=out[y-1].endA; begB=out[y-1].endB; shA=out[y-1].shAe; shB=out[y-1].shBe; }
+
+    const totBeg=begA+begB;
+    const inc=(+yr.real||0)+(+yr.unreal||0);
+    const denom=totBeg+(+yr.depA||0)+(+yr.depB||0);
+    const ret=denom!==0?inc/denom:0;
+    const hasB=(begB+(+yr.depB||0))!==0;
+
+    // Class B hurdle $  (B20)
+    let hurdle$;
+    if(!hasB) hurdle$=0;
+    else if(ret>H) hurdle$=inc*H;
+    else if(inc<0) hurdle$=0;
+    else hurdle$=inc;
+
+    // Class A return (B18)
+    let retA;
+    if(!hasB) retA=inc;
+    else if(ret>H) retA=(inc-hurdle$)*S;
+    else if(inc<0) retA=inc*-ret;
+    else retA=0;
+
+    // Class B return (B19)
+    let retB;
+    if(!hasB) retB=0;
+    else if(ret>H) retB=(inc-hurdle$)*(1-S);
+    else if(inc<0) retB=inc*(1+ret);
+    else retB=0;
+
+    const totA=retA;                 // B21
+    const totB=retB+hurdle$;          // B22
+    const totRet=totA+totB;           // B23
+
+    const endA=begA+(+yr.depA||0)+totA;   // B25
+    const endB=begB+(+yr.depB||0)+totB;   // B26
+
+    const par=(+state.parPrice||1);
+    const begPriceA=shA!==0?begA/shA:0;   // B33
+    let begPriceB=begPriceA;
+    if(shB!==0 && begB/shB!==0) begPriceB=begB/shB; // B34
+    // When a class has no shares yet, issue the first deposit's shares at par price.
+    const issueA=begPriceA!==0?begPriceA:par;
+    const issueB=begPriceB!==0?begPriceB:par;
+    const newA=issueA!==0?Math.floor((+yr.depA||0)/issueA):0; // B36
+    const newB=issueB!==0?Math.floor((+yr.depB||0)/issueB):0; // B37
+    const shAe=shA+newA, shBe=shB+newB;
+    const endPriceA=shAe!==0?endA/shAe:0;
+    const endPriceB=shBe!==0?endB/shBe:endPriceA;
+
+    out.push({begA,begB,totBeg,inc,ret,hurdle:hurdle$,retA,retB,totA,totB,totRet,
+      endA,endB,endTot:endA+endB,shAb:shA,shBb:shB,shAe,shBe,
+      begPriceA,begPriceB,endPriceA,endPriceB,depA:+yr.depA||0,depB:+yr.depB||0,
+      totBeginShares:shA+shB});
+  }
+  return out;
+}
+
+/* ---------- formatting ---------- */
+const fmt$=n=>{ n=Math.round((+n||0)); const neg=n<0;
+  return (neg?"-$":"$")+Math.abs(n).toLocaleString("en-US"); };
+const fmt$2=n=>{ n=(+n||0); const neg=n<0;
+  return (neg?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); };
+const fmtPct=n=>((+n||0)*100).toFixed(1)+"%";
+const fmtNum=n=>Math.round(+n||0).toLocaleString("en-US");
+const yearLabel=i=>state.startYear+i;
+const divLabel=d=>(d==="Quarterly"||d==="Semi-Annual"||d==="Annual")?d+" dividend":d;
+
+// A year index is visible if it has any fund submission, or the current year falls within it.
+function visibleYears(){
+  const cur=new Date().getFullYear();
+  const hasEntry=new Set(state.ledger.filter(e=>e.account==="fund").map(e=>e.year));
+  const out=[];
+  state.years.forEach((_,i)=>{
+    if(hasEntry.has(i) || yearLabel(i)===cur) out.push(i);
+  });
+  if(!out.length) out.push(0); // always show at least the first year
+  return out;
+}
+
+/* ---------- render: FUND ---------- */
+function renderYearbar(id,sel,onPick){
+  const bar=document.getElementById(id); bar.innerHTML="";
+  const vis=visibleYears();
+  vis.forEach(i=>{
+    const b=document.createElement("button");
+    b.className="ychip"+(i===sel?" active":"");
+    b.textContent=yearLabel(i);
+    b.onclick=()=>onPick(i);
+    bar.appendChild(b);
+  });
+}
+function renderFund(){
+  const vis=visibleYears();
+  if(!vis.includes(state.ui.fundYear)) state.ui.fundYear=vis[vis.length-1];
+  const f=computeFund(); const y=state.ui.fundYear; const r=f[y]; const yr=state.years[y];
+  renderYearbar("yearbar",y,i=>{state.ui.fundYear=i;save();renderFund();});
+  document.getElementById("yr-pill").textContent=yearLabel(y);
+
+  document.getElementById("m-ending").textContent=fmt$(r.endTot);
+  const mr=document.getElementById("m-return");
+  mr.textContent=fmtPct(r.ret);
+  mr.className="sval "+(Math.abs(r.ret)<0.00005?"zero":r.ret>0?"pos":"neg");
+  const mg=document.getElementById("m-gain");
+  mg.textContent=fmt$(r.totRet);
+  mg.className="sval "+(Math.abs(r.totRet)<0.5?"zero":r.totRet>0?"pos":"neg");
+
+  document.getElementById("o-begA").textContent=fmt$(r.begA);
+  document.getElementById("o-begB").textContent=fmt$(r.begB);
+  document.getElementById("o-begShA").textContent=fmtNum(r.shAb);
+  document.getElementById("o-begShB").textContent=fmtNum(r.shBb);
+  document.getElementById("o-begPrA").textContent=fmt$2(r.begPriceA);
+  document.getElementById("o-begPrB").textContent=fmt$2(r.begPriceB);
+  ro("o-depA",fmt$(yr.depA),yr.depA);
+  ro("o-depB",fmt$(yr.depB),yr.depB);
+  ro("o-real",fmt$(yr.real),yr.real);
+  ro("o-unreal",fmt$(yr.unreal),yr.unreal);
+
+  ro("o-hurdle",fmt$(r.hurdle),r.hurdle);
+  ro("o-retA",fmt$(r.totA),r.totA);
+  ro("o-retB",fmt$(r.totB),r.totB);
+  ro("o-rettot",fmt$(r.totRet),r.totRet);
+
+  document.getElementById("o-endA").textContent=fmt$(r.endA);
+  document.getElementById("o-endB").textContent=fmt$(r.endB);
+  document.getElementById("o-shA").textContent=fmtNum(r.shAe);
+  document.getElementById("o-shB").textContent=fmtNum(r.shBe);
+  document.getElementById("o-prA").textContent=fmt$2(r.endPriceA);
+  document.getElementById("o-prB").textContent=fmt$2(r.endPriceB);
+  renderMonthPicker();
+  renderChart();
+}
+function ro(id,txt,n){ const e=document.getElementById(id); e.textContent=txt;
+  e.className="readout "+(Math.abs(n)<0.005?"zero":n>0?"pos":"neg"); }
+
+/* ---------- render: SHAREHOLDERS ---------- */
+// Cumulative contributed equity per shareholder, through year index y (inclusive).
+function contributionsByHolder(cls,y){
+  const map={};
+  state.shareholders.filter(s=>s.cls===cls).forEach(s=>map[s.id]={name:s.name,amt:0});
+  state.ledger.forEach(e=>{
+    if(e.account!=="fund") return;
+    if(cls==="A" && e.field!=="depA") return;
+    if(cls==="B" && e.field!=="depB") return;
+    if(e.year>y) return;
+    if(e.holderId && map[e.holderId]) map[e.holderId].amt+=(+e.amount||0);
+  });
+  return map;
+}
+function renderShares(){
+  const vis=visibleYears();
+  if(!vis.includes(state.ui.shareYear)) state.ui.shareYear=vis[vis.length-1];
+  const f=computeFund(); const y=state.ui.shareYear; const r=f[y];
+  renderYearbar("yearbar2",y,i=>{state.ui.shareYear=i;save();renderShares();});
+
+  // Major = Class A shareholders, allocated the Class A ending equity by contribution share
+  const majWrap=document.getElementById("majorList"); majWrap.innerHTML="";
+  const aMap=contributionsByHolder("A",y);
+  const aList=state.shareholders.filter(s=>s.cls==="A");
+  const aTotal=Object.values(aMap).reduce((s,h)=>s+h.amt,0);
+  aList.forEach(s=>{
+    const amt=aMap[s.id]?aMap[s.id].amt:0;
+    const pct=aTotal!==0?amt/aTotal:(aList.length===1?1:0);
+    majWrap.appendChild(holderCard(s.name,"A",pct,r.endA*pct,amt));
+  });
+  if(!aList.length) majWrap.innerHTML='<div class="empty">No Class A shareholders yet</div>';
+
+  // Minor = Class B shareholders
+  const minWrap=document.getElementById("minorList"); minWrap.innerHTML="";
+  const bMap=contributionsByHolder("B",y);
+  const bList=state.shareholders.filter(s=>s.cls==="B");
+  const bTotal=Object.values(bMap).reduce((s,h)=>s+h.amt,0);
+  if(!bList.length) minWrap.innerHTML='<div class="empty">No minor shareholders yet</div>';
+  bList.forEach(s=>{
+    const amt=bMap[s.id]?bMap[s.id].amt:0;
+    const pct=bTotal!==0?amt/bTotal:0;
+    minWrap.appendChild(holderCard(s.name,"B",pct,r.endB*pct,amt));
+  });
+  document.getElementById("sh-count").textContent=fmtNum(bList.length);
+  document.getElementById("sh-tval").textContent=fmt$(bTotal);
+}
+function holderCard(name,cls,pct,val,contrib){
+  const c=document.createElement("div"); c.className="holding";
+  c.innerHTML=`<div class="hhead">
+    <div class="htick">${esc((name||"?").slice(0,2).toUpperCase())}</div>
+    <div class="hmeta"><div class="nm">${esc(name)}</div>
+      <div class="dt">${fmtPct(pct)} of Class ${cls} · contributed ${fmt$(contrib)}</div></div>
+    <div class="hstat"><div class="v">${fmt$(val)}</div>
+      <div class="s">equity value</div></div></div>`;
+  return c;
+}
+
+/* ---------- render: INVESTMENTS ---------- */
+function avgCost(trades,uptoIdx){
+  // average $ price = cumulative buy cost / cumulative buy shares (matches workbook AVG logic)
+  let cost=0,sh=0;
+  for(let i=0;i<=uptoIdx;i++){
+    const t=trades[i]; if((t.action||"").toLowerCase()==="sell") continue;
+    cost+=(+t.shares||0)*(+t.price||0); sh+=(+t.shares||0);
+  }
+  return sh!==0?cost/sh:0;
+}
+function posSummary(p){
+  let net=0;
+  p.trades.forEach(t=>{ const s=(+t.shares||0)*((t.action||"").toLowerCase()==="sell"?-1:1); net+=s; });
+  const basis=net>0?avgCost(p.trades,p.trades.length-1):0;
+  return {net,basis,value:net*basis};
+}
+function positionCard(p){
+  const sum=posSummary(p);
+  const c=document.createElement("div"); c.className="holding";
+  const head=document.createElement("div"); head.className="hhead";
+  head.innerHTML=`<div class="htick">${esc(p.ticker.slice(0,4))}</div>
+    <div class="hmeta"><div class="nm">${esc(p.name)}</div>
+      <div class="dt">${sum.net>0?fmtNum(sum.net)+" shares held":"position closed"} · ${esc(divLabel(p.div))}</div></div>
+    <div class="hstat"><div class="v">${sum.net>0?fmt$(sum.value):"—"}</div>
+      <div class="s">${sum.net>0?"Avg · "+fmt$2(sum.basis):"closed"}</div></div>
+    <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`;
+  head.onclick=()=>c.classList.toggle("open");
+  c.appendChild(head);
+  const body=document.createElement("div"); body.className="hbody";
+  p.trades.forEach((t,ti)=>{
+    const sell=(t.action||"").toLowerCase()==="sell";
+    const row=document.createElement("div"); row.className="trade";
+    row.innerHTML=`<span class="tbadge ${sell?"sell":"buy"}">${sell?"SELL":"BUY"}</span>
+      <div class="tinfo"><div class="l1">${fmtNum(t.shares)} @ ${fmt$2(t.price)}</div>
+        <div class="l2">${t.date||"no date"}</div></div>
+      <div class="tnum">${fmt$(((+t.shares||0)*(+t.price||0)))}<div class="l2" style="font-size:10px;color:var(--txt3)">total</div></div>`;
+    body.appendChild(row);
+  });
+  c.appendChild(body);
+  return c;
+}
+function renderInvest(){
+  const wrap=document.getElementById("posList"); wrap.innerHTML="";
+  const pastList=document.getElementById("pastList"); pastList.innerHTML="";
+  let openCount=0,totalCost=0,pastCount=0;
+  state.positions.forEach((p)=>{
+    if(p.name==="Cash") return; // Cash is derived, rendered separately below
+    if(!p.trades.length) return; // ignore empty stubs
+    const sum=posSummary(p);
+    if(sum.net>0){ openCount++; totalCost+=sum.value; wrap.appendChild(positionCard(p)); }
+    else { pastCount++; pastList.appendChild(positionCard(p)); }
+  });
+
+  // Derived Cash = account value − cumulative (all-time) gain/loss − total cost basis
+  const f=computeFund();
+  const last=f.length?f[f.length-1]:null;
+  const accountValue=last?last.endTot:0;
+  const gainLoss=f.reduce((s,r)=>s+(+r.totRet||0),0); // all years
+  const cash=accountValue-gainLoss-totalCost;
+  const cc=document.createElement("div"); cc.className="holding";
+  cc.innerHTML=`<div class="hhead" style="cursor:default">
+    <div class="htick">$</div>
+    <div class="hmeta"><div class="nm">Cash</div></div>
+    <div class="hstat"><div class="v">${fmt$(cash)}</div>
+      <div class="s">available</div></div>
+    <span class="chev" style="visibility:hidden;width:18px;height:18px"></span></div>`;
+  if(cash<0) cc.querySelector(".v").style.color="var(--red)";
+  wrap.insertBefore(cc,wrap.firstChild);
+
+  if(openCount===0 && cash===0 && pastCount===0)
+    wrap.innerHTML='<div class="empty">No positions yet. Submit a buy on the Fund tab.</div>';
+
+  // Past holdings dropdown
+  document.getElementById("pastWrap").style.display=pastCount?"block":"none";
+  document.getElementById("pastCount").textContent=pastCount;
+  document.getElementById("iv-acct").textContent=fmt$(accountValue);
+  document.getElementById("iv-cost").textContent=fmt$(totalCost);
+}
+document.getElementById("pastToggle").onclick=function(){
+  const list=document.getElementById("pastList");
+  const open=list.style.display!=="none";
+  list.style.display=open?"none":"block";
+  this.classList.toggle("open",!open);
+};
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  document.getElementById("set-hurdle").value=state.hurdle;
+  document.getElementById("set-split").value=state.split;
+  document.getElementById("set-startyr").value=state.startYear;
+}
+document.getElementById("set-hurdle").addEventListener("input",e=>{
+  state.hurdle=parseFloat(e.target.value)||0;save();renderFund();renderShares();});
+document.getElementById("set-split").addEventListener("input",e=>{
+  state.split=parseFloat(e.target.value)||0;save();renderFund();renderShares();});
+document.getElementById("set-startyr").addEventListener("input",e=>{
+  state.startYear=parseInt(e.target.value)||2026;save();renderFund();renderShares();});
+
+document.getElementById("btnExport").onclick=()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a");
+  a.href=url; a.download="remarkable-assets-"+new Date().toISOString().slice(0,10)+".json";
+  a.click(); URL.revokeObjectURL(url);
+};
+document.getElementById("btnImport").onclick=()=>document.getElementById("fileImport").click();
+document.getElementById("fileImport").onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const hint=document.getElementById("storehint");
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ state=JSON.parse(rd.result); save(); renderAll();
+    hint.textContent="Backup restored."; }
+    catch(err){ hint.textContent="Could not read that file."; } };
+  rd.readAsText(f);
+};
+document.getElementById("btnReset").onclick=async()=>{
+  const ok=await askConfirm("Reset everything to defaults? Export a backup first if you want to keep your data.","Reset all data");
+  if(ok){ state=DEFAULTS(); save(); renderAll(); }
+};
+
+/* ---------- modal + tab plumbing ---------- */
+function openModal(id){ document.getElementById(id).classList.add("open"); document.body.style.overflow="hidden"; }
+function closeModal(id){ document.getElementById(id).classList.remove("open"); document.body.style.overflow=""; }
+
+// Sandbox-safe confirmation (native confirm() is blocked in some embedded frames).
+let _cfResolve=null;
+function askConfirm(msg,title){
+  document.getElementById("cfTitle").textContent=title||"Are you sure?";
+  document.getElementById("cfMsg").textContent=msg||"";
+  openModal("confirmModal");
+  return new Promise(res=>{ _cfResolve=res; });
+}
+document.getElementById("cfCancel").onclick=()=>{ closeModal("confirmModal");
+  if(_cfResolve){ _cfResolve(false); _cfResolve=null; } };
+document.getElementById("cfOk").onclick=()=>{ closeModal("confirmModal");
+  if(_cfResolve){ _cfResolve(true); _cfResolve=null; } };
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{
+  if(e.target===m){ m.classList.remove("open"); document.body.style.overflow="";
+    if(m.id==="confirmModal" && _cfResolve){ _cfResolve(false); _cfResolve=null; } }}));
+
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("section").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById(t.dataset.tab).classList.add("active");
+  window.scrollTo(0,0);
+});
+
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- fund change modal ---------- */
+let fundDir=1;
+function holderClassForField(f){ return f==="depA"?"A":f==="depB"?"B":null; }
+function isTradeField(f){ return f==="buy"||f==="sell"; }
+function refreshFields(){
+  const f=document.getElementById("fmField").value;
+  const cls=holderClassForField(f);
+  const trade=isTradeField(f);
+  // money section (direction + amount) only for deposit/withdrawal/income
+  document.getElementById("fmMoneyWrap").style.display=trade?"none":"block";
+  // direction labels: Gain/Loss for unrealized income, Deposit/Withdrawal otherwise
+  const gainLoss=f==="unreal";
+  document.getElementById("fmDirPos").textContent=gainLoss?"Gain (+)":"Deposit (+)";
+  document.getElementById("fmDirNeg").textContent=gainLoss?"Loss (−)":"Withdrawal (−)";
+  // holder section for deposit/withdrawal
+  const hWrap=document.getElementById("fmHolderWrap");
+  if(cls){
+    hWrap.style.display="block";
+    document.getElementById("fmHolderLbl").textContent=
+      cls==="A"?"Class A (major) shareholder":"Class B (minor) shareholder";
+    const sel=document.getElementById("fmHolder"); sel.innerHTML="";
+    state.shareholders.filter(s=>s.cls===cls).forEach(s=>{
+      const o=document.createElement("option"); o.value=s.id; o.textContent=s.name; sel.appendChild(o); });
+    const o=document.createElement("option"); o.value="__new__"; o.textContent="+ New shareholder…";
+    sel.appendChild(o);
+    sel.value=sel.options[0]?sel.options[0].value:"__new__";
+    toggleNewName();
+  } else hWrap.style.display="none";
+  // security section for buy/sell
+  const sWrap=document.getElementById("fmSecWrap");
+  if(trade){
+    sWrap.style.display="block";
+    const sel=document.getElementById("fmSec"); sel.innerHTML="";
+    state.positions.forEach((p,i)=>{
+      if(p.name==="Cash") return; // Cash is derived, not directly tradeable
+      const o=document.createElement("option"); o.value=String(i);
+      o.textContent=p.ticker+" · "+p.name; sel.appendChild(o); });
+    const o=document.createElement("option"); o.value="__new__"; o.textContent="+ New security…";
+    sel.appendChild(o);
+    sel.value=sel.options[0]?sel.options[0].value:"__new__";
+    toggleNewSec();
+  } else sWrap.style.display="none";
+}
+function toggleNewName(){
+  document.getElementById("fmNewWrap").style.display=
+    document.getElementById("fmHolder").value==="__new__"?"block":"none";
+}
+function toggleNewSec(){
+  document.getElementById("fmNewSecWrap").style.display=
+    document.getElementById("fmSec").value==="__new__"?"block":"none";
+}
+document.getElementById("fmField").addEventListener("change",refreshFields);
+document.getElementById("fmHolder").addEventListener("change",toggleNewName);
+document.getElementById("fmSec").addEventListener("change",toggleNewSec);
+
+const EQUITY_OPTS=[["depA","Class A deposit / withdrawal"],["depB","Class B deposit / withdrawal"]];
+const POSITION_OPTS=[["buy","Buy security"],["sell","Sell security"],["unreal","Unrealized income"]];
+function openFundModal(mode){
+  fundDir=1;
+  document.querySelectorAll("#fmDir button").forEach(b=>b.classList.toggle("on",b.dataset.v==="1"));
+  ["fmAmount","fmNote","fmNewName","fmShares","fmPrice","fmSecTicker","fmSecName"]
+    .forEach(id=>document.getElementById(id).value="");
+  const sel=document.getElementById("fmField"); sel.innerHTML="";
+  const opts=mode==="equity"?EQUITY_OPTS:POSITION_OPTS;
+  opts.forEach(([v,l])=>{ const o=document.createElement("option"); o.value=v; o.textContent=l; sel.appendChild(o); });
+  sel.value=opts[0][0];
+  document.getElementById("fmTitle").textContent=
+    mode==="equity"?"Submit equity change":"Submit position change";
+  const selYear=yearLabel(state.ui.fundYear);
+  const today=new Date();
+  document.getElementById("fmDate").value=(today.getFullYear()===selYear)
+    ? today.toISOString().slice(0,10) : selYear+"-01-01";
+  refreshFields();
+  openModal("fundModal");
+}
+document.getElementById("addEquityChange").onclick=()=>openFundModal("equity");
+document.getElementById("addPositionChange").onclick=()=>openFundModal("position");
+document.querySelectorAll("#fmDir button").forEach(b=>b.onclick=()=>{
+  fundDir=+b.dataset.v;
+  document.querySelectorAll("#fmDir button").forEach(x=>x.classList.toggle("on",x===b));
+});
+document.getElementById("fmCancel").onclick=()=>closeModal("fundModal");
+document.getElementById("fmSave").onclick=()=>{
+  const field=document.getElementById("fmField").value;
+  const date=document.getElementById("fmDate").value||new Date().toISOString().slice(0,10);
+  const note=document.getElementById("fmNote").value.trim();
+  const y=Math.max(0,(+date.slice(0,4))-state.startYear);
+  ensureYears(y);
+
+  if(isTradeField(field)){
+    const sh=parseFloat(document.getElementById("fmShares").value)||0;
+    const pr=parseFloat(document.getElementById("fmPrice").value)||0;
+    if(sh<=0){ document.getElementById("fmShares").focus(); return; }
+    // resolve security
+    let pi, p;
+    const secSel=document.getElementById("fmSec").value;
+    if(secSel==="__new__"){
+      const tk=document.getElementById("fmSecTicker").value.trim().toUpperCase();
+      if(!tk){ document.getElementById("fmSecTicker").focus(); return; }
+      p={ticker:tk,name:document.getElementById("fmSecName").value.trim()||tk,
+        div:document.getElementById("fmSecDiv").value,trades:[]};
+      state.positions.push(p); pi=state.positions.length-1;
+    } else { pi=+secSel; p=state.positions[pi]; }
+    const action=field==="buy"?"Buy":"Sell";
+    const lid=newId();
+    // capture avg cost BEFORE adding this trade (for realized gain on sells)
+    const avgBefore=p.trades.length?avgCost(p.trades,p.trades.length-1):0;
+    p.trades.push({action,date,shares:sh,price:pr,_lid:lid});
+    state.ledger.push({id:lid,ts:Date.now(),account:"trade",posIndex:pi,date,
+      ticker:p.ticker,label:action+" "+p.ticker,
+      amount:sh*pr*(action==="Sell"?-1:1),
+      note:fmtNum(sh)+" @ "+fmt$2(pr)+" · "+date});
+    // selling realizes income = proceeds - cost basis of shares sold
+    if(action==="Sell"){
+      const realized=sh*(pr-avgBefore);
+      state.ledger.push({id:newId(),ts:Date.now(),account:"fund",field:"real",year:y,date,
+        srcTradeId:lid,  // linked so deleting the sale removes this too
+        label:"Realized income · "+p.ticker,amount:realized,
+        note:fmtNum(sh)+" "+p.ticker+" @ "+fmt$2(pr)+" (cost "+fmt$2(avgBefore)+") · "+date});
+    }
+    state.ui.fundYear=y;
+    save(); renderFund(); renderShares(); renderInvest(); renderHistory();
+    closeModal("fundModal");
+    return;
+  }
+
+  // money fields (deposit/withdrawal/income)
+  const amt=(parseFloat(document.getElementById("fmAmount").value)||0)*fundDir;
+  if(amt===0){ document.getElementById("fmAmount").focus(); return; }
+  let holderId=null, holderName="";
+  const cls=holderClassForField(field);
+  if(cls){
+    const sel=document.getElementById("fmHolder").value;
+    if(sel==="__new__"){
+      const nm=document.getElementById("fmNewName").value.trim();
+      if(!nm){ document.getElementById("fmNewName").focus(); return; }
+      holderId=newId();
+      state.shareholders.push({id:holderId,name:nm,cls});
+      holderName=nm;
+    } else {
+      holderId=sel;
+      const s=state.shareholders.find(x=>x.id===sel);
+      holderName=s?s.name:"";
+    }
+  }
+  state.ledger.push({id:newId(),ts:Date.now(),account:"fund",field,year:y,date,holderId,
+    label:FUND_FIELDS[field]+(holderName?" · "+holderName:""),amount:amt,
+    note:(note?note+" · ":"")+date});
+  state.ui.fundYear=y;
+  save(); renderFund(); renderShares(); renderInvest(); renderHistory();
+  closeModal("fundModal");
+};
+function ensureYears(y){
+  while(state.years.length<=y) state.years.push({depA:0,depB:0,real:0,unreal:0});
+}
+
+/* ---------- account value chart ---------- */
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+// All dated fund entries (deposits/withdrawals/income), oldest first.
+function datedFundEntries(){
+  return state.ledger
+    .filter(e=>e.account==="fund" && e.date)
+    .slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+}
+// List of "YYYY-MM" that have at least one dated entry.
+function activeMonths(){
+  const set=new Set(datedFundEntries().map(e=>e.date.slice(0,7)));
+  return [...set].sort();
+}
+
+function chartData(){
+  const entries=datedFundEntries();
+  if(state.ui.chartMode==="annual"){
+    const f=computeFund();
+    return f.map((r,i)=>({label:String(yearLabel(i)),value:r.endTot}))
+      .filter((_,i)=>visibleYears().includes(i));
+  }
+  // monthly mode
+  if(state.ui.chartMonth){
+    // focus a single month: cumulative value across that month's individual entries (by date)
+    const m=state.ui.chartMonth;
+    // running total up to the start of the month (undated openings + earlier dated entries)
+    let base=state.ledger.filter(e=>e.account==="fund" && !e.date)
+      .reduce((s,e)=>s+(+e.amount||0),0);
+    entries.forEach(e=>{ if(e.date.slice(0,7)<m) base+=(+e.amount||0); });
+    const inMonth=entries.filter(e=>e.date.slice(0,7)===m);
+    let run=base; const pts=[];
+    inMonth.forEach(e=>{ run+=(+e.amount||0);
+      pts.push({label:e.date.slice(8,10),value:run,date:e.date}); });
+    return pts;
+  }
+  // all months: cumulative account value at each month-end that had activity
+  const months=activeMonths();
+  // undated fund entries (e.g. migrated openings) form the starting base
+  let run=state.ledger.filter(e=>e.account==="fund" && !e.date)
+    .reduce((s,e)=>s+(+e.amount||0),0);
+  const byMonth={};
+  entries.forEach(e=>{ run+=(+e.amount||0); byMonth[e.date.slice(0,7)]=run; });
+  return months.map(m=>{ const [yy,mm]=m.split("-");
+    return {label:MONTHS[(+mm)-1]+" '"+yy.slice(2),value:byMonth[m],ym:m}; });
+}
+
+document.querySelectorAll("#chToggle button").forEach(b=>b.onclick=()=>{
+  state.ui.chartMode=b.dataset.m;
+  if(state.ui.chartMode==="annual") state.ui.chartMonth=null;
+  document.querySelectorAll("#chToggle button").forEach(x=>x.classList.toggle("on",x===b));
+  save(); renderMonthPicker(); renderChart();
+});
+
+function renderMonthPicker(){
+  const wrap=document.getElementById("monthPicker"); wrap.innerHTML="";
+  if(state.ui.chartMode!=="monthly"){ return; }
+  const months=activeMonths();
+  if(!months.length) return;
+  const bar=document.createElement("div"); bar.className="yearbar"; bar.style.marginBottom="12px";
+  const allBtn=document.createElement("button");
+  allBtn.className="ychip"+(state.ui.chartMonth?"":" active"); allBtn.textContent="All months";
+  allBtn.onclick=()=>{ state.ui.chartMonth=null; save(); renderMonthPicker(); renderChart(); };
+  bar.appendChild(allBtn);
+  months.forEach(m=>{ const [yy,mm]=m.split("-");
+    const b=document.createElement("button");
+    b.className="ychip"+(state.ui.chartMonth===m?" active":"");
+    b.textContent=MONTHS[(+mm)-1]+" '"+yy.slice(2);
+    b.onclick=()=>{ state.ui.chartMonth=m; save(); renderMonthPicker(); renderChart(); };
+    bar.appendChild(b);
+  });
+  wrap.appendChild(bar);
+}
+
+function renderChart(){
+  const wrap=document.getElementById("chartWrap");
+  const data=chartData();
+  if(data.length===0){
+    wrap.innerHTML='<div class="chart-empty">'+(state.ui.chartMode==="monthly"
+      ?"No dated changes yet. Submit a change with a date to build the chart."
+      :"No fund data yet.")+'</div>';
+    return;
+  }
+  const W=680,H=240,padL=54,padR=16,padT=16,padB=34;
+  const values=data.map(d=>d.value);
+  let min=Math.min(...values,0), max=Math.max(...values);
+  if(max===min){ max=min+1; }
+  const padv=(max-min)*0.1; max+=padv;
+  const x=i=>padL+(data.length<=1?(W-padL-padR)/2:(i/(data.length-1))*(W-padL-padR));
+  const y=v=>padT+(1-(v-min)/(max-min))*(H-padT-padB);
+  let grid="",labels="";
+  for(let g=0;g<=4;g++){
+    const gv=min+(max-min)*(g/4); const gy=y(gv);
+    grid+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="var(--line)" stroke-width="1"/>`;
+    labels+=`<text x="${padL-8}" y="${gy+4}" text-anchor="end" font-size="11" fill="var(--txt3)">${abbr(gv)}</text>`;
+  }
+  const pts=data.map((d,i)=>[x(i),y(d.value)]);
+  const linePath=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  const areaPath=linePath+` L${x(data.length-1).toFixed(1)} ${y(min).toFixed(1)} L${x(0).toFixed(1)} ${y(min).toFixed(1)} Z`;
+  let dots="",xlabels="";
+  pts.forEach((p,i)=>{
+    dots+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="var(--accent)" stroke="#fff" stroke-width="1.5"/>`;
+    const show=data.length<=8||i===0||i===data.length-1||i%Math.ceil(data.length/8)===0;
+    if(show) xlabels+=`<text x="${p[0].toFixed(1)}" y="${H-padB+18}" text-anchor="middle" font-size="11" fill="var(--txt3)">${esc(data[i].label)}</text>`;
+  });
+  const titleNote=state.ui.chartMode==="monthly"&&state.ui.chartMonth
+    ? `<text x="${padL}" y="12" font-size="11" fill="var(--txt3)">Daily within selected month</text>`:"";
+  wrap.innerHTML=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+    <defs><linearGradient id="gv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>
+    ${grid}
+    <path d="${areaPath}" fill="url(#gv)"/>
+    <path d="${linePath}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}${labels}${xlabels}${titleNote}
+  </svg>`;
+}
+function abbr(n){ n=+n||0; const a=Math.abs(n);
+  if(a>=1e6) return "$"+(n/1e6).toFixed(1)+"M";
+  if(a>=1e3) return "$"+(n/1e3).toFixed(0)+"k";
+  return "$"+Math.round(n); }
+
+/* ---------- history ---------- */
+let histFilter="all";
+document.querySelectorAll("#hfilter .hchip").forEach(b=>b.onclick=()=>{
+  histFilter=b.dataset.f;
+  document.querySelectorAll("#hfilter .hchip").forEach(x=>x.classList.toggle("active",x===b));
+  renderHistory();
+});
+const HIST_ICON={fund:"$",trade:"⇄",shareholder:"◷"};
+function renderHistory(){
+  const wrap=document.getElementById("histList"); wrap.innerHTML="";
+  const items=state.ledger
+    .filter(e=>histFilter==="all"||e.account===histFilter)
+    .slice().sort((a,b)=>b.ts-a.ts);
+  if(!items.length){ wrap.innerHTML='<div class="empty">No changes recorded yet</div>'; return; }
+  items.forEach(e=>{
+    const isTrade=e.account==="trade", isShare=e.account==="shareholder";
+    const amtTxt=isTrade?fmt$(Math.abs(e.amount)):isShare?fmtNum(Math.abs(e.amount))+" sh":fmt$(e.amount);
+    const cls=Math.abs(e.amount)<0.005?"zero":e.amount>0?"pos":"neg";
+    const sign=e.amount>0?"+":e.amount<0?"−":"";
+    const when=new Date(e.ts).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+    const row=document.createElement("div"); row.className="hentry";
+    // Auto-generated realized income (tied to a sale) is removed with its sale, not on its own.
+    const canDelete=!e.srcTradeId;
+    row.innerHTML=`<div class="hicon ${e.account}">${HIST_ICON[e.account]||"•"}</div>
+      <div class="hbody2"><div class="hl">${esc(e.label)}</div>
+        <div class="hd">${esc(e.note||"")}${e.note?" · ":""}${when}</div></div>
+      <div class="ha ${cls}">${sign}${amtTxt}</div>
+      ${canDelete?'<span class="hx" title="Delete">✕</span>'
+        :'<span class="hx" style="opacity:.25;pointer-events:none" title="Removed with its sale">✕</span>'}`;
+    if(canDelete) row.querySelector(".hx").onclick=()=>deleteEntry(e);
+    wrap.appendChild(row);
+  });
+}
+async function deleteEntry(e){
+  const ok=await askConfirm("Delete this entry? It will be reversed in the account totals.","Delete entry");
+  if(!ok) return;
+  if(e.account==="trade"){
+    const p=state.positions[e.posIndex];
+    if(p){ const i=p.trades.findIndex(t=>t._lid===e.id); if(i>=0) p.trades.splice(i,1); }
+    // also remove any realized-income entry generated by this trade
+    state.ledger=state.ledger.filter(x=>x.srcTradeId!==e.id);
+  }
+  // fund entries: removing the log line removes the amount, since fields are summed from the ledger
+  state.ledger=state.ledger.filter(x=>x.id!==e.id);
+  save(); renderAll();
+}
+
+function renderAll(){ renderFund(); renderShares(); renderInvest(); renderSettings(); renderHistory(); }
+
+load().then(()=>{
+  if(!window.storage){ document.getElementById("storehint").textContent=
+    "Note: running outside the app, so autosave is off. Use Export to keep your data."; }
+  document.querySelectorAll("#chToggle button").forEach(x=>
+    x.classList.toggle("on",x.dataset.m===state.ui.chartMode));
+  renderAll();
+});
+})();
+</script>
+</body>
+</html>
